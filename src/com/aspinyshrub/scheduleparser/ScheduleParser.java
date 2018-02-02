@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -109,10 +110,18 @@ public class ScheduleParser {
             @Override
             public void widgetSelected(SelectionEvent event){
                 if (origionalFilePath.getText().length() == 0){
-                    MessageBox errorBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY )
+                    MessageBox errorBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY );
+                    errorBox.setText("Warning");
+                    errorBox.setMessage("Origional file required!");
+                    
+                    errorBox.open();
                 }
                 else if (newFilePath.getText().length() == 0){
+                    MessageBox errorBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY );
+                    errorBox.setText("Warning");
+                    errorBox.setMessage("New file required!");
                     
+                    errorBox.open();
                 }
                 else {
                     
