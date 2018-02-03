@@ -93,6 +93,8 @@ public class ScheduleParser {
                 String[] filterExtension = { "*.csv" };
                 fileDialog.setFilterExtensions(filterExtension);
                 String selected = fileDialog.open();
+                
+                newFilePath.setText(selected);
             }
             
             @Override
@@ -124,7 +126,7 @@ public class ScheduleParser {
                     errorBox.open();
                 }
                 else {
-                    
+                    Parser.Parse(origionalFilePath.getText(), newFilePath.getText());
                 }
             }
             
