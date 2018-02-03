@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.aspinyshrub.scheduleparser;
+import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -22,7 +23,7 @@ import org.eclipse.swt.widgets.Text;
  * @author furze
  */
 public class ScheduleParser {
-    Text origionalFilePath;
+    Text originalFilePath;
     Text newFilePath;
     Text differences;
     /**
@@ -50,10 +51,10 @@ public class ScheduleParser {
         
         new Label(shell, SWT.NONE).setText("Origional File:");
         
-        origionalFilePath = new Text(shell, SWT.SINGLE | SWT.BORDER);
-        origionalFilePath.setEnabled(false);
+        originalFilePath = new Text(shell, SWT.SINGLE | SWT.BORDER);
+        originalFilePath.setEnabled(false);
         GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
-        origionalFilePath.setLayoutData(gridData);
+        originalFilePath.setLayoutData(gridData);
         
         final Button browseOrigionalFile = new Button(shell, SWT.PUSH);
         browseOrigionalFile.setText("Browse");
@@ -67,7 +68,7 @@ public class ScheduleParser {
                 fileDialog.setFilterExtensions(filterExtension);
                 String selected = fileDialog.open();
                 
-                origionalFilePath.setText(selected);
+                originalFilePath.setText(selected);
             }
             
             @Override
@@ -111,7 +112,7 @@ public class ScheduleParser {
         parse.addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent event){
-                if (origionalFilePath.getText().length() == 0){
+                if (originalFilePath.getText().length() == 0){
                     MessageBox errorBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY );
                     errorBox.setText("Warning");
                     errorBox.setMessage("Origional file required!");
@@ -126,7 +127,10 @@ public class ScheduleParser {
                     errorBox.open();
                 }
                 else {
-                    Parser.Parse(origionalFilePath.getText(), newFilePath.getText());
+                    ArrayList<String> differencesText = Parser.Parse(originalFilePath.getText(), newFilePath.getText());
+                    for (String difference : differencesText) {
+                        differences.append(difference + "\n");
+                    }
                 }
             }
             
@@ -142,7 +146,7 @@ public class ScheduleParser {
         differencesLabelGridData.horizontalSpan = 3;
         differencesLabel.setLayoutData(differencesLabelGridData);
         
-        differences = new Text(shell, SWT.MULTI | SWT.BORDER);
+        differences = new Text(shell, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL);
         differences.setEnabled(false);
         GridData differencesGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
         differencesGridData.horizontalSpan = 3;
