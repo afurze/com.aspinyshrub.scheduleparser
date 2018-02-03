@@ -41,6 +41,7 @@ public class ScheduleParser {
     }
     
     public Shell createShell(Display display) {
+        // main display def
         Shell shell = new Shell(display);
         shell.setSize(500, 500);
         shell.setText("Schedule Parser");
@@ -51,6 +52,7 @@ public class ScheduleParser {
         
         new Label(shell, SWT.NONE).setText("Origional File:");
         
+        // original file display stuff
         originalFilePath = new Text(shell, SWT.SINGLE | SWT.BORDER);
         originalFilePath.setEnabled(false);
         GridData gridData = new GridData(SWT.FILL, SWT.CENTER, true, false);
@@ -77,6 +79,7 @@ public class ScheduleParser {
             }
         });
         
+        // new file display stuff
         new Label(shell, SWT.NONE).setText("New File:");
         
         newFilePath = new Text(shell, SWT.SINGLE | SWT.BORDER);
@@ -104,6 +107,7 @@ public class ScheduleParser {
             }
         });
         
+        // do awesome parsing!
         final Button parse = new Button(shell, SWT.PUSH);
         GridData parseGridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
         parseGridData.horizontalSpan = 3;
@@ -112,6 +116,7 @@ public class ScheduleParser {
         parse.addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent event){
+                // first make sure file paths specified
                 if (originalFilePath.getText().length() == 0){
                     MessageBox errorBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY );
                     errorBox.setText("Warning");
@@ -127,6 +132,7 @@ public class ScheduleParser {
                     errorBox.open();
                 }
                 else {
+                    // do parsing, add results to display
                     ArrayList<String> differencesText = Parser.Parse(originalFilePath.getText(), newFilePath.getText());
                     for (String difference : differencesText) {
                         differences.append(difference + "\n");
@@ -140,6 +146,7 @@ public class ScheduleParser {
             }
         });
         
+        // differences display def
         Label differencesLabel = new Label(shell, SWT.NONE);
         differencesLabel.setText("Differences");
         GridData differencesLabelGridData = new GridData(SWT.CENTER, SWT.CENTER, true, false);
@@ -152,6 +159,7 @@ public class ScheduleParser {
         differencesGridData.horizontalSpan = 3;
         differences.setLayoutData(differencesGridData);
         
+        // export of differences display stuff
         GridData exportGridData = new GridData(SWT.RIGHT, SWT.CENTER, true, false);
         exportGridData.horizontalSpan = 3;
         final Button export = new Button(shell,SWT.PUSH);
