@@ -8,7 +8,6 @@ package com.aspinyshrub.scheduleparser;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Iterator;
 import org.apache.commons.csv.*;
 
 /**
@@ -22,7 +21,10 @@ public class Parser {
     private static ArrayList<Game> newList = new ArrayList<Game>();
     
     public static ArrayList<String> Parse(String originalFilePath, String newFilePath){
-        ArrayList<String> results = new ArrayList<String>();
+        ArrayList<String> results = new ArrayList<>();
+        
+        originalList = new ArrayList<>();
+        newList = new ArrayList<>();
 
         // load parsers
         try {
@@ -43,10 +45,7 @@ public class Parser {
         newParser = CSVParser.parse(newFile, Charset.defaultCharset(), CSVFormat.DEFAULT);
     }
     
-    private static void GetLists() throws IOException {
-        //origionalList = originalParser.getRecords();
-        //newList = newParser.getRecords();
-        
+    private static void GetLists() throws IOException {        
         for (CSVRecord record : originalParser.getRecords()) {
             originalList.add(new Game(record));
         }
@@ -59,23 +58,24 @@ public class Parser {
     }
     
     private static ArrayList<String> CompareLists() {
-        ArrayList<String> results = new ArrayList<String>();
+        ArrayList<String> results = new ArrayList<>();
         
         // loop thru new game list comparing to old
-        for (Game game : newList) {
+        newList.forEach((game) -> {
             if (originalList.contains(game)) { // game from new list already existed
                 
+                for (String detail : game.record) {
+                    
+                }
             } else { // new game
                 results.add("New game: " + game.record.get(0));
             }
-        }
+        });
         
         // finally check for removed games
-        for (Game game : originalList) {
-            if (!newList.contains(game)) {
-                results.add("Removed game: " + game.record.get(0));
-            }
-        }
+        originalList.stream().filter((game) -> (!newList.contains(game))).forEachOrdered((game) -> {
+            results.add("Removed game: " + game.record.get(0));
+        });
         
         return results;
     }

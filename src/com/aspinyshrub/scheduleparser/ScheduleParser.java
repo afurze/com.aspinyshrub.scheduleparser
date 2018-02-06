@@ -50,7 +50,7 @@ public class ScheduleParser {
         layout.numColumns = 3;
         shell.setLayout(layout);
         
-        new Label(shell, SWT.NONE).setText("Origional File:");
+        new Label(shell, SWT.NONE).setText("Original File:");
         
         // original file display stuff
         originalFilePath = new Text(shell, SWT.SINGLE | SWT.BORDER);
@@ -116,6 +116,9 @@ public class ScheduleParser {
         parse.addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent event){
+                // clear previous parse results
+                differences.setText("");
+                
                 // first make sure file paths specified
                 if (originalFilePath.getText().length() == 0){
                     MessageBox errorBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY );
@@ -134,9 +137,9 @@ public class ScheduleParser {
                 else {
                     // do parsing, add results to display
                     ArrayList<String> differencesText = Parser.Parse(originalFilePath.getText(), newFilePath.getText());
-                    for (String difference : differencesText) {
+                    differencesText.forEach((difference) -> {
                         differences.append(difference + "\n");
-                    }
+                    });
                 }
             }
             
