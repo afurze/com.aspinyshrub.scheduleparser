@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package com.aspinyshrub.scheduleparser;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -157,14 +159,14 @@ public class ScheduleParser {
         differencesLabel.setLayoutData(differencesLabelGridData);
         
         differences = new Text(shell, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL);
-        differences.setEnabled(false);
+        //differences.setEnabled(false);
         GridData differencesGridData = new GridData(SWT.FILL, SWT.FILL, true, true);
         differencesGridData.horizontalSpan = 3;
         differences.setLayoutData(differencesGridData);
-        
+             
         // export of differences display stuff
         GridData exportGridData = new GridData(SWT.RIGHT, SWT.CENTER, true, false);
-        exportGridData.horizontalSpan = 3;
+        exportGridData.horizontalSpan = 2;
         final Button export = new Button(shell,SWT.PUSH);
         export.setLayoutData(exportGridData);
         export.setText("Export");
@@ -172,7 +174,30 @@ public class ScheduleParser {
         export.addSelectionListener(new SelectionListener() {
             @Override
             public void widgetSelected(SelectionEvent event){
-                //TODO
+                // let user pick destination file
+                FileDialog dialog = new FileDialog(shell, SWT.SAVE);
+                dialog.setText("Save");
+                String[] exts = { "*.txt" };
+                dialog.setFilterExtensions(exts);
+                String selected = dialog.open();
+                
+                try {
+                    FileWriter writer = new FileWriter(selected);
+                    writer.write(differences.getText());
+                    writer.close();
+                    
+                    MessageBox successBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY );
+                    successBox.setText("Success");
+                    successBox.setMessage("Success!");
+                    
+                    successBox.open();
+                } catch (IOException e) {
+                    MessageBox errorBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.RETRY );
+                    errorBox.setText("Warning");
+                    errorBox.setMessage("Failed to write file!");
+                    
+                    errorBox.open();
+                }
             }
             
             @Override
