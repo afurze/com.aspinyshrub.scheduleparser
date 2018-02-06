@@ -63,18 +63,21 @@ public class Parser {
         // loop thru new game list comparing to old
         newList.forEach((game) -> {
             if (originalList.contains(game)) { // game from new list already existed
-                
-                for (String detail : game.record) {
-                    
+                Game originalGame = originalList.get(newList.indexOf(game));
+                for (int i = 0; i < game.record.size(); i++) {
+                    if (!game.record.get(i).equals(originalGame.record.get(i))) {
+                        results.add("Modified detail: Game#" + game.record.get(0) + ", " + 
+                                originalGame.record.get(i) + " -> " + game.record.get(i));
+                    }
                 }
             } else { // new game
-                results.add("New game: " + game.record.get(0));
+                results.add("New game: Game#" + game.record.get(0));
             }
         });
         
         // finally check for removed games
         originalList.stream().filter((game) -> (!newList.contains(game))).forEachOrdered((game) -> {
-            results.add("Removed game: " + game.record.get(0));
+            results.add("Removed game: Game#" + game.record.get(0));
         });
         
         return results;
